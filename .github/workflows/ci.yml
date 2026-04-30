@@ -1,0 +1,117 @@
+name: CI — Security + Regression
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  security-events: write
+
+jobs:
+
+  security-secrets:
+    name: Stage 1 · Secrets (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  security-dependencies:
+    name: Stage 1 · Dependencies (OWASP)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+      - uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: ${{ github.event.repository.name }}
+          path: '.'
+          format: 'HTML'
+          args: >
+            --enableExperimental
+            --failOnCVSS 7
+            --suppression .github/owasp-suppressions.xml || true
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: owasp-dependency-report
+          path: reports/
+          retention-days: 14
+
+  security-trivy:
+    name: Stage 1 · Filesystem (Trivy)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          severity: 'HIGH,CRITICAL'
+          exit-code: '1'
+          ignore-unfixed: true
+          format: 'table'
+
+  regression-tests:
+    name: Stage 2 · Regression (pytest)
+    needs: [security-secrets, security-dependencies, security-trivy]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+      - run: |
+          pytest tests/ \
+            --cov=src \
+            --cov-report=xml \
+            --cov-report=term \
+            --junitxml=pytest-results.xml
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-results
+          path: |
+            pytest-results.xml
+            coverage.xml
+          retention-days: 14
+
+  ci-passed:
+    name: CI Passed
+    needs: [security-secrets, security-dependencies, security-trivy, regression-tests]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Verify all stages passed
+        run: |
+          if [[ "${{ needs.security-secrets.result }}" != "success" \
+             || "${{ needs.security-dependencies.result }}" != "success" \
+             || "${{ needs.security-trivy.result }}" != "success" \
+             || "${{ needs.regression-tests.result }}" != "success" ]]; then
+            echo "::error::One or more CI stages failed — merge is blocked."
+            exit 1
+          fi
+          echo "All CI stages passed — PR is safe to merge."
