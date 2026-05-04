@@ -1,0 +1,276 @@
+name: CI — Security + Regression
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  security-events: write
+  actions: read
+
+jobs:
+
+  # ─────────────────────────────────────────
+  # STAGE 1A — Secret Scanning (Gitleaks)
+  # ─────────────────────────────────────────
+  security-secrets:
+    name: Stage 1A · Secrets (Gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: "true"
+          GITLEAKS_ENABLE_SUMMARY: "true"
+
+  # ─────────────────────────────────────────
+  # STAGE 1B — Dependency Scanning (OWASP)
+  # ─────────────────────────────────────────
+  security-dependencies:
+    name: Stage 1B · Dependencies (OWASP)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+          cache: 'maven'
+      - uses: dependency-check/Dependency-Check_Action@main
+        with:
+          project: ${{ github.event.repository.name }}
+          path: '.'
+          format: 'HTML'
+          args: >
+            --enableExperimental
+            --failOnCVSS 7
+            --suppression .github/owasp-suppressions.xml
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: owasp-dependency-report
+          path: reports/
+          retention-days: 14
+
+  # ─────────────────────────────────────────
+  # STAGE 1C — Filesystem Scan (Trivy)
+  # ─────────────────────────────────────────
+  security-trivy:
+    name: Stage 1C · Filesystem (Trivy)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          severity: 'HIGH,CRITICAL'
+          exit-code: '1'
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # ─────────────────────────────────────────
+  # STAGE 1D — SAST (CodeQL)
+  # ─────────────────────────────────────────
+  security-codeql:
+    name: Stage 1D · SAST (CodeQL)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        language: [java]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+          cache: 'maven'
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended,security-and-quality
+      - uses: github/codeql-action/autobuild@v3
+      - uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ matrix.language }}"
+
+  # ─────────────────────────────────────────
+  # STAGE 1E — Container Image Scan (Trivy)
+  # ─────────────────────────────────────────
+  security-container:
+    name: Stage 1E · Container Image (Trivy)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image for scanning
+        run: docker build -t app-image:${{ github.sha }} .
+      - name: Scan container image
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'image'
+          image-ref: 'app-image:${{ github.sha }}'
+          severity: 'HIGH,CRITICAL'
+          exit-code: '1'
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'trivy-container.sarif'
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: 'trivy-container.sarif'
+
+  # ─────────────────────────────────────────
+  # STAGE 1F — License Compliance
+  # ─────────────────────────────────────────
+  security-licenses:
+    name: Stage 1F · License Compliance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+          cache: 'maven'
+      - name: Generate license report
+        run: |
+          mvn org.codehaus.mojo:license-maven-plugin:2.3.0:aggregate-third-party-report \
+            -DincludeTransitiveDependencies=true \
+            -Dlicense.outputDirectory=target/license-reports \
+            --no-transfer-progress
+      - name: Fail on GPL / AGPL / LGPL licenses
+        run: |
+          REPORT=target/license-reports/THIRD-PARTY.txt
+          if grep -qE "(GPL|AGPL|LGPL)" "$REPORT" 2>/dev/null; then
+            echo "::error::Restricted license (GPL/AGPL/LGPL) detected in dependencies"
+            grep -E "(GPL|AGPL|LGPL)" "$REPORT"
+            exit 1
+          fi
+          echo "License check passed — no restricted licenses found."
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: license-report
+          path: target/license-reports/
+          retention-days: 14
+
+  # ─────────────────────────────────────────
+  # STAGE 1G — IaC Scanning (Checkov)
+  # ─────────────────────────────────────────
+  security-iac:
+    name: Stage 1G · IaC Scan (Checkov)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+          framework: dockerfile,github_actions,secrets
+          soft_fail: false
+          output_format: sarif
+          output_file_path: checkov-results.sarif
+      - uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: checkov-results.sarif
+
+  # ─────────────────────────────────────────
+  # STAGE 2 — Regression Tests (JUnit + Maven)
+  # ─────────────────────────────────────────
+  regression-tests:
+    name: Stage 2 · Regression (JUnit + Maven)
+    needs:
+      - security-secrets
+      - security-dependencies
+      - security-trivy
+      - security-codeql
+      - security-container
+      - security-licenses
+      - security-iac
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+          cache: 'maven'
+      - name: Run regression tests
+        run: |
+          mvn test \
+            -Dspring.profiles.active=test \
+            --no-transfer-progress \
+            -Dsurefire.failIfNoSpecifiedTests=false
+        env:
+          encryption_key: ${{ secrets.ENCRYPTION_KEY }}
+      - name: Generate JaCoCo coverage report
+        if: always()
+        run: mvn jacoco:report --no-transfer-progress
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            target/surefire-reports/
+            target/site/jacoco/
+          retention-days: 14
+      - name: Publish test summary
+        if: always()
+        uses: mikepenz/action-junit-report@v4
+        with:
+          report_paths: 'target/surefire-reports/TEST-*.xml'
+          check_name: 'JUnit Regression Results'
+
+  # ─────────────────────────────────────────
+  # FINAL — CI Gate
+  # ─────────────────────────────────────────
+  ci-passed:
+    name: CI Passed
+    needs:
+      - security-secrets
+      - security-dependencies
+      - security-trivy
+      - security-codeql
+      - security-container
+      - security-licenses
+      - security-iac
+      - regression-tests
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Verify all stages passed
+        run: |
+          results=(
+            "${{ needs.security-secrets.result }}"
+            "${{ needs.security-dependencies.result }}"
+            "${{ needs.security-trivy.result }}"
+            "${{ needs.security-codeql.result }}"
+            "${{ needs.security-container.result }}"
+            "${{ needs.security-licenses.result }}"
+            "${{ needs.security-iac.result }}"
+            "${{ needs.regression-tests.result }}"
+          )
+          for result in "${results[@]}"; do
+            if [[ "$result" != "success" ]]; then
+              echo "::error::One or more CI stages failed — merge is blocked."
+              exit 1
+            fi
+          done
+          echo "All CI stages passed — PR is safe to merge."

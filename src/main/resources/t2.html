@@ -1,0 +1,281 @@
+<html>
+    <head>
+        <style>
+            /*                    table {*/
+            /*border-collapse: collapse;*/
+            /* Add a border to the entire table */
+            /*    }*/
+
+            /*    th, td {
+                    border: 1px solid #ededed;  Add borders to table cells 
+                     Add some padding for better appearance 
+                }*/
+            .company-logo{
+                width:150px;
+
+                object-fit:contain;
+            }
+            .company-name{
+                font-size:22px;
+                font-weight:600;
+            }
+            .address{
+                float:right;
+                width:300px;
+            }
+            .row1, .row2{
+                background:lightgray;
+                padding:4px;
+                font-weight:700;
+                font-size:18px;
+            }
+            .row2{
+                background:#e7e7e7;
+                color:#010077;
+
+            }
+            .name{
+                font-weight:700;
+            }
+            table{
+                border-collapse: collapse;
+            }
+            .row-style{
+                /*outline:  1px solid lightgray !important;*/
+                border: 1px solid lightgray;
+            }
+            .title, .description{
+                color:#010077;
+                font-size:14px;
+            }
+            .description{
+                font-weight:700;
+            }
+
+            .earning-deduction{
+                width:25%;
+            }
+
+            .my-table, .my-th, .earning-deduction, .my-td{
+                border: 1px solid #ededed !important;
+                border-collapse: collapse;
+            }
+
+        </style>
+    </head>
+    <body style="padding:4px">
+        <table style="width:100%">
+            <tbody>
+                <tr>
+                    <td valign="top"> <img class="company-logo" src="$companyLogo"  /></td>
+                    <td align="right"><div class="company-name">$companyName</div>
+                    </td>
+                </tr>
+                <tr align="right"> <td></td><td  align="right">
+                        <div class="address">$addressOne</div>
+                        <div class="address">$addressTwo</div>
+                        <div class="address">$addressThree</div>
+                    </td></tr>
+            </tbody>
+        </table>
+        <table style="width:100%;margin-top:20px">
+            <tbody>
+                <tr>
+                    <td align="center" class="row1">Payslip for the month of $monthAndYear</td>
+                </tr>
+                <!--Personal Information-->
+                <tr>
+                    <td align="center" class="row2">Personal Information</td>
+                </tr>
+
+                <tr>
+            <table style="width:100%">
+                <tbody>
+                    <tr class="row-style" >
+                        <td  align="left" class="row3"><span class="name">Name: </span><span>$name</span></td>
+                        <td align="right" class="row3"><span class="name">Emp No: </span><span>$employee_code</span> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </tr>
+        <tr>
+        <table class="my-table" style="width:100%">
+
+            <tbody>
+                <tr class="row-style">
+                    <td class="my-td title">Department</td>
+                    <td class=" my-td description">$department_name</td>
+                    <td class="my-td title">Designation</td>
+                    <td class="my-td description">$desingnation</td>
+                </tr>
+                <tr class="row-style">
+                    <td class="my-td title">Date Of Joining</td>
+                    <td class="my-td description">$joining_date</td>
+                    <td class="my-td title">ESI No</td>
+                    <td class="my-td description">$esic</td>
+                </tr>
+                <tr class="row-style">
+                    <td class="my-td title">UAN No</td>
+                    <td class="my-td description">$uan</td>
+                    <td class="my-td title">Pan Card No</td>
+                    <td class="my-td description">$pan_number</td>
+                </tr>
+                <tr class="row-style">
+                    <td class="title">Aadhar Card No</td>
+                    <td class="description">$aadhar_number</td>
+                    <td class="title">Bank Name</td>
+                    <td class="description">$bankname</td>
+                </tr>
+                <tr class="row-style">
+                    <td class="my-td title">Bank Account No</td>
+                    <td class="my-td description">$bankaccount</td>
+                    <td class="my-td title">PF No</td>
+                    <td class="my-td description">$pf</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </tr>
+
+
+</tbody>
+</table>
+
+<table style="width:100%">
+    <tbody>
+
+        <tr>
+            <td align="center" class="row2">Leave Information</td>
+        </tr>
+        <!--Leave information-->
+        <tr>
+    <table class="my-table" style="width:100%">
+        <tbody>
+            <tr class="row-style">
+                <td class="my-td title">Available Calendar Days</td>
+                <td class="my-td description">$actualDay</td>
+                <td class="my-td title">LOP Days</td>
+                <td class="my-td description">$Lwp</td>
+            </tr>
+            <tr class="row-style">
+                <td class="my-td title">No. Of Working Days</td>
+                <td class="my-td description">$workingDay</td>
+                <td class="my-td title">Leaves Availed</td>
+                <td class="my-td description">$approvedLeave</td>
+            </tr>
+            <tr class="row-style">
+                <td class="my-td title">Paid Days</td>
+                <td class="my-td description">$workingDay</td>
+                <td class="my-td title"></td>
+                <td class="my-td description"></td>
+            </tr>
+
+
+        </tbody>
+    </table>
+</tr>
+</tbody>
+</table>
+<!--Earnings and deductions-->
+
+<table style="width:100%">
+    <tbody>
+
+        <tr>
+            <td align="center" class="row2">Earnings and Deductions</td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="my-table" style="width:100%" cellpadding="5">
+    <thead>
+        <tr class="row-style"><th class="my-th">Actual</th>
+            <th class="my-th">Earnings</th><th class="my-th">Deductions</th>
+        </tr>
+    </thead>
+    <tbody>
+        $rows
+        <!--        <tr>
+                    left section
+                    <td class="earning-deduction">
+                        <table style="width:100%" >
+                            <tbody>
+                                <tr >
+                                    <td class="title">HRA</td>
+                                    <td class="description" align="right">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    middle section
+                    <td class="earning-deduction">
+                        <table style="width:100%" >
+                            <tbody>
+                                <tr >
+                                    <td class="title" >HRA</td>
+                                    <td class="description" align="right">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+        
+                    right section
+                    <td class="earning-deduction">
+                        <table style="width:100%" >
+                            <tbody>
+                                <tr >
+                                    <td class="title">Professional Tax</td>
+                                    <td class="description"align="right">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr >
+                    left section
+                    <td class="earning-deduction">
+                        <table style="width:100%" >
+                            <tbody>
+                                <tr >
+                                    <td class="title">LTA</td>
+                                    <td class="description" align="right">1250</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    middle section
+                    <td class="earning-deduction">
+                        <table style="width:100%" >
+                            <tbody>
+                                <tr >
+                                    <td class="title">LTA</td>
+                                    <td class="description"align="right">1250</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+        
+                    right section
+                    <td class="earning-deduction">
+                        <table style="width:100%" >
+                            <tbody>
+                                <tr >
+                                    <td class="title">Advance</td>
+                                    <td class="description" align="right">0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>-->
+    </tbody>
+</table>
+<table class="my-table" style="width:100%" cellpadding="5">
+    <tbody>
+        <tr ><td ><span class="description">$netAmountName </span><span class="title"> $netAmount</span></td></tr>
+
+        <tr ><td class="description">$amountInWord</td></tr>
+    </tbody>
+</table>
+<div style="text-align:center;margin-top:20px"><span><b>Note: </b></span>This is electronically generated and does not require any signature.</div>
+</body>
+</html>

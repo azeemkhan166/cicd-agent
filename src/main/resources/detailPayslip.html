@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+   <style>
+     body{
+       padding: 5px;
+     }
+     .company-logo{
+      width: 150px;
+   height: 38px;
+    object-fit: cover;
+     }
+     .company-name{
+       margin-top: 15px;
+       text-transform: capitalize;
+       font-size:18px;
+     }
+     .details tr td{
+       font-size: 12px;
+       word-wrap: break-word;
+     }
+     
+     .my-table, .my-table tr{
+       
+       border: 1px solid black;
+     }
+     .my-table td{
+       
+        border: 1px solid black;
+     }
+     .my-table{
+       table-layout: fixed;
+       border-collapse: collapse;
+     }
+     .my-table td {
+  padding: 5px; 
+  margin: 0;
+}
+   </style>
+  </head>
+  <body>
+    <!-- table no. 1-->
+      <table >
+        <tbody>
+          <tr>
+            <td><img class="company-logo" src="$companyLogo" alt="company-logo"/></td>
+          </tr>
+          <tr>
+            <td>
+              <div class="company-name"><b>$companyName</b></div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="text">For the month of $monthAndYear .</div>
+            </td>
+          </tr>
+           <tr>
+            <td>
+              <div class="text"><b>$name</b></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!--table no.2-->
+      <table style="width:100%; margin-top:10px">
+        <tbody>
+          <tr>
+            <td class="title"><b>Code</b></td>
+            <td class="description">$employee_code</td>
+            <td class="title"><b>Position</b></td>
+            <td class="description">$desingnation</td>
+          </tr>
+           <tr>
+            <td class="title"><b>DOJ</b></td>
+            <td class="description">$joining_date</td>
+            <td class="title"><b>Total Worked Day</b></td>
+            <td class="description">$workingDay</td>
+          </tr>
+           <tr>
+            <td class="title"><b>Location</b></td>
+            <td class="description">$location</td>
+            <td class="title"><b>Bank Account</b></td>
+            <td class="description">$bankaccount</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- table no.3-->
+      <table  class="my-table" style="width:100%; margin-top:10px">
+        <tbody class="details">
+             $details
+          
+         
+        </tbody>
+      </table>
+  </body>
+</html>

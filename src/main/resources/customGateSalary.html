@@ -1,0 +1,131 @@
+<html>
+    <head>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                color: #333;
+            }
+            .salary-slip {
+                max-width: 800px;
+                margin: auto;
+                border: 1px solid #333;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 15px;
+            }
+            table th, table td {
+                border: 1px solid #999;
+                padding: 6px;
+                font-size: 12px;
+                text-align: left;
+            }
+            table th {
+                background: #f2f2f2;
+            }
+            .net-salary {
+                text-align: right;
+                font-weight: bold;
+                font-size: 14px;
+                margin-top: 10px;
+            }
+            @media print {
+                body {
+                    margin: 0;
+                }
+                .salary-slip {
+                    border: none;
+                    box-shadow: none;
+                    font-size: 11px;
+                    padding: 10px;
+                }
+                table th, table td {
+                    padding: 3px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="salary-slip">
+
+            <table>
+                <tbody>
+
+                    <tr>
+                        <td colspan="3" style="text-align:center; font-weight:bold;">
+                            FORM XIX <br />
+                            [See Rule 78(1)(b)] <br />
+                            The Contract Labour (Regulation & Abolition) Central Rules, 1971 <br />
+                            Wage Slip
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Name and address of Contractor</td>
+                        <td>$companyName<br/><br/>
+                            $addressOne<br/>
+                            $addressTwo<br/>
+                            $addressThree<br/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"> Work Order Type</td>
+                        <td> </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Name and Father's/Husband's name of the workman : </td>
+                        <td>$name </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">  For the Week-Fortnight-Month Ending</td>
+                        <td>
+                            <table style="width:100%;border-collapse:collapse; border:none; margin-bottom:0;">
+                                <tr>
+                                    <td style="width:50%; border-top:none; border-left:none; border-bottom:none;"></td>
+                                    <td style="width:50%; border:none;"></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+
+
+                    <tr><td style="width:3%; text-align:center;">1</td><td style="width:47%;">No. of days worked</td><td><table style="width:100%;border-collapse:collapse; border:none; margin-bottom:0;">
+                                <tr>
+                                    <td style="width:25%; border-top:none; border-left:none; border-bottom:none;">$workingDays</td>
+                                    <td style="width:50%; border-top:none; border-left:none; border-bottom:none;"> Paid Leave Days :</td>
+                                    <td style="width:25%; border:none;">$leave</td>
+                                </tr>
+                            </table></td></tr>
+                    <tr><td style="width:3%; text-align:center;">2</td><td>No. of units worked in case of piece rate workers</td><td>Nill</td></tr>
+                    <tr><td style="width:3%; text-align:center;">3</td><td> Monthly rate / Daily rate / Piece rate</td><td><table style="width:100%;border-collapse:collapse; border:none; margin-bottom:0;">
+                                <tr>
+                                    <td style="width:20%; border-top:none; border-left:none; border-bottom:none;">MONTHL</td>
+                                    <td style="width:30%; border-top:none; border-left:none; border-bottom:none;"> Rate of Wage </td>
+                                    <td style="width:10%; border-top:none; border-left:none; border-bottom:none;"> 0</td>
+                                    <td style="width:30%; border-top:none; border-left:none; border-bottom:none;"> WO :</td>
+                                    <td style="width:10%; border:none;">$weekoff</td>
+                                </tr>
+                            </table></td></tr>
+                    <tr><td style="width:3%; text-align:center;">4</td><td>PH Days / EH Days</td><td><table style="width:100%;border-collapse:collapse; border:none; margin-bottom:0;">
+                                <tr>
+                                    <td style="width:10%; border-top:none; border-left:none; border-bottom:none;">$holidays</td>
+                                    <td style="width:20%; border-top:none; border-left:none; border-bottom:none;"> OT Hours </td>
+                                    <td style="width:20%; border-top:none; border-left:none; border-bottom:none;">$otHours</td>
+                                    <td style="width:30%; border-top:none; border-left:none; border-bottom:none;"> POW Hours :</td>
+                                    <td style="width:20%; border:none;">0</td>
+                                </tr>
+                            </table></td></tr>
+                  $rows
+                   
+                </tbody>
+            </table>
+
+        </div>
+    </body>
+</html>

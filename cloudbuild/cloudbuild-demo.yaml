@@ -1,0 +1,63 @@
+steps:
+  # Copy the first configuration file from Cloud Storage
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', 'gs://rcz-demo-workspace/admin/credentials/gcpConfigFile.json', 'src/main/resources/']
+    id: Bucket_File
+
+  # Copy the SECOND configuration file from Cloud Storage
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', 'gs://rcz-demo-workspace/admin/demo/payroll/application-prod.yaml', 'src/main/resources/']
+    id: Application_Prod_Yaml_File
+
+  # Copy the THIRD configuration file from Cloud Storage
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', 'gs://rcz-demo-workspace/admin/demo/payroll/application.yaml', 'src/main/resources/']
+    id: Application_Yaml_File  
+
+  # MAVEN Build
+  - name: 'gcr.io/cloud-builders/mvn'
+    args: ['clean', 'install']
+    id: MAVEN_BUILD 
+
+  # Ensure that COMMIT_SHA is set
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        if [ -z "$COMMIT_SHA" ]; then
+          echo "COMMIT_SHA environment variable is not set."
+          exit 1
+        fi
+
+  # Build app
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/realcoderzdemo/demo-payroll:$COMMIT_SHA', '.']
+    id: BUILD
+
+  # Push image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/realcoderzdemo/demo-payroll:$COMMIT_SHA']
+    id: STORAGE
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: DEPLOY
+    args:
+      [
+        'run', 'deploy', 'demo-payroll',
+        '--image', 'gcr.io/realcoderzdemo/demo-payroll:$COMMIT_SHA',
+        '--region', 'us-central1',
+        '--platform', 'managed',
+        '--port', '8080',
+        '--allow-unauthenticated',
+        '--set-secrets=ENCRYPTION_KEY=ENCRYPTION_KEY:latest',
+        '--set-secrets=GCP_DB_USER=GCP_DB_USER:latest',
+        '--set-secrets=GCP_DB_PASSWORD=GCP_DB_PASSWORD:latest'
+      ]
+
+images:
+  - 'gcr.io/realcoderzdemo/demo-payroll:$COMMIT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

@@ -1,0 +1,206 @@
+<html>
+    <head>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                color: #333;
+            }
+            .salary-slip {
+                max-width: 800px;
+                margin: auto;
+                border: 1px solid #333;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 15px;
+                table-layout: fixed; 
+            }
+            table th, table td {
+                border: 1px solid #999;
+                padding: 6px;
+                font-size: 12px;
+                text-align: left;
+            }
+            table th {
+                background: #f2f2f2;
+            }
+            .net-salary {
+                text-align: right;
+                font-weight: bold;
+                font-size: 14px;
+                margin-top: 10px;
+            }
+            .no-border {
+                border: none;
+            }
+            .font-bold {
+                font-weight:bold;
+            }
+            .company-logo{
+                width:150px;
+
+                object-fit:contain;
+            }
+            @media print {
+                body {
+                    margin: 0;
+                }
+                .salary-slip {
+                    border: none;
+                    box-shadow: none;
+                    font-size: 11px;
+                    padding: 10px;
+                }
+                table th, table td {
+                    padding: 3px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="salary-slip">
+
+            <table>
+                <tbody>
+
+                    <tr style="border: none;">
+
+                        <td colspan="3" style="text-align:center; border:none;">
+                            <img class="company-logo"  src="$companyLogo" alt="Test Logo" style="display:block; margin:auto;" />
+
+                        </td>
+
+                        <td colspan="3" style=" text-align:left ;font-weight:bold; border:none;">
+                            $companyName <br /><br />
+                            $addressOne <br />
+                            $addressTwo <br />
+                            $addressThree
+                        </td>
+                    </tr>
+
+                    <tr >
+                        <td colspan="6" style="padding-top: 16px; font-weight:bold; border:none;">Salary Slip for the Month of $monthAndYear</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="6" style="border:none; height:20px;"></td>
+                    </tr>
+
+                    <tr >
+                        <td  class="no-border font-bold"> Employee ID</td>
+                        <td class="no-border" colspan="2">$empCode</td>
+                        <td class="no-border font-bold">Employee Name</td>
+                        <td class="no-border" colspan="2">$name</td>
+                    </tr>
+
+                    <tr >
+                        <td class="no-border font-bold">Designation</td>
+                        <td class="no-border" colspan="2">$empDesingnation</td>
+                        <td class="no-border font-bold">DOJ</td>
+                        <td class="no-border" colspan="2">$joiningDate</td>
+                    </tr>
+
+                    <tr>
+                        <td class="no-border font-bold">Department</td>
+                        <td class="no-border" colspan="2">$departmentName</td>
+                        <td class="no-border font-bold">Grade</td>
+                        <td class="no-border" colspan="2">$grade</td>
+                    </tr>
+
+                    <tr >
+                        <td class="no-border font-bold">PayCader</td>
+                        <td class="no-border" colspan="2">Staff</td>
+                        <td class="no-border font-bold">PF No.</td>
+                        <td class="no-border" colspan="2">$pf</td>
+                    </tr>
+
+                    <tr >
+                        <td class="no-border font-bold">Bank A/c No.</td>
+                        <td class="no-border" colspan="2">$bankaccount</td>
+                        <td class="no-border font-bold">Bank Name</td>
+                        <td class="no-border" colspan="2">$bankname</td>
+                    </tr>
+
+                    <tr >
+                        <td class="no-border font-bold">ESI No.</td>
+                        <td class="no-border" colspan="2">$esic</td>
+                        <td class="no-border font-bold">UAN No.</td>
+                        <td class="no-border" colspan="2">$uan</td>
+                    </tr>
+
+                    <tr>
+                        <td class="no-border font-bold">Attendance</td>
+                        <td class="no-border" colspan="2">$workingdays out of $actualWorkingDay</td>
+                        <td class="no-border font-bold">PAN No:</td>
+                        <td class="no-border" colspan="2">$panNumber</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="6" style="border:none; height:20px;"></td>
+                    </tr>
+
+
+                    <tr>
+                        <th>Actuals</th>
+                        <th>Amount (Rs)</th>
+                        <th>Earnings</th>
+                        <th>Amount (Rs)</th>
+                        <th>Deductions</th>
+                        <th>Amount (Rs)</th>
+                    </tr>
+                  $rows
+
+                    <tr>
+                        <td> P: $workingdays </td>
+                        <td>W/Off: $weekOff</td>
+                        <td>WOP: 0 <br/> LWP\LOP: $lwp</td>
+                        <td>RHP: 0 </td>
+                        <td>HL: 0</td>
+                        <td>C/Off: 0</td>
+                    </tr>
+
+                    <tr>
+                        <td class="font-bold" colspan="3">Reimbursement</td>
+                        <td class="font-bold" colspan="3">Leave Balance</td>
+
+                    </tr>
+
+                    <tr>
+                        <td colspan="3"></td>
+                        <td colspan="3">
+                            <table style="width:100%;border-collapse:collapse; border:none; margin:0;">
+                                <tr>
+                                    <td style="border-top:none; border-left:none; border-bottom:none;">Leave Type</td>
+                                    <td style="border-top:none; border-left:none; border-bottom:none;">Op. Bal</td>
+                                    <td style="border-top:none; border-left:none; border-bottom:none;">Used</td>
+                                    <td style="border-top:none; border-left:none; border-bottom:none;">Cr:</td>
+                                    <td style="border:none;">Balance</td>
+                                </tr>
+                                $leaveRows
+
+<!--                                <tr>
+                                    <td style="border-left:none;">CL</td>
+                                    <td >4</td>
+                                    <td >1</td>
+                                    <td>0 </td>
+                                    <td style="border-right:none;">3</td>
+                                </tr>
+                               -->
+                               
+                               
+                            </table>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+    </body>
+</html>

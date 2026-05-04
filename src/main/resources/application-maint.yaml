@@ -1,0 +1,37 @@
+server:
+  use-forward-headers: true
+spring:
+    cloud:
+        gcp:
+            sql:
+                database-name: payroll_maint
+                instance-connection-name: realcoderzstaging:us-central1:development
+    datasource :
+        username: realcoderzstagging
+        password: realcoderzstagging
+        continue-on-error : true
+        initialization-mode : always
+        hibernate.jdbc.time_zone : IST
+    jpa:
+        generate-ddl: true
+        hibernate.ddl-auto: update
+        properties.hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
+
+gcp:
+ config:
+   file: gcp-bucket-creds.json    
+
+reimburshment_url: https://maint-manage-mmj2qig23a-uc.a.run.app   
+assessment_url: https://maint-apigateway-mmj2qig23a-uc.a.run.app/recruit
+bucketName: dev-payroll
+stagging: https://maint-manage-mmj2qig23a-uc.a.run.app
+wkhtmlToPdfPath:  wkhtmltopdf
+akron_organization_id: 348
+recruitBucketName: dev-recruit
+arriers_org_id: 3
+Organization_ids: 308
+notification_url: https://maint-notification-mmj2qig23a-uc.a.run.app
+apiGateWayUrl: https://maint-apigateway-mmj2qig23a-uc.a.run.app
+recruit_base_url: https://maint-apigateway-mmj2qig23a-uc.a.run.app/recruit
+orgIdForSymbol: 303
+gcpFilePath: "https://storage.googleapis.com/"

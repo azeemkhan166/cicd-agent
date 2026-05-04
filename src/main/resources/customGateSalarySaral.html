@@ -1,0 +1,135 @@
+<html>
+    <head>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 20px;
+                color: #333;
+            }
+            .salary-slip {
+                max-width: 800px;
+                margin: auto;
+                border: 1px solid #333;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 15px;
+                table-layout: fixed; 
+            }
+            table th, table td {
+                border: 1px solid #999;
+                padding: 6px;
+                font-size: 12px;
+                text-align: left;
+            }
+            table th {
+                background: #f2f2f2;
+            }
+            .net-salary {
+                text-align: right;
+                font-weight: bold;
+                font-size: 14px;
+                margin-top: 10px;
+            }
+            .no-border {
+                border: none;
+            }
+            .font-bold {
+                font-weight:bold;
+            }
+            .company-logo{
+                width:150px;
+
+                object-fit:contain;
+            }
+            @media print {
+                body {
+                    margin: 0;
+                }
+                .salary-slip {
+                    border: none;
+                    box-shadow: none;
+                    font-size: 11px;
+                    padding: 10px;
+                }
+                table th, table td {
+                    padding: 3px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="salary-slip">
+
+            <table>
+                <tbody>
+
+                    <tr style="border: none;">
+
+                        <td colspan="5" style=" text-align:left ;font-weight:bold; border:none;">
+                            $companyName <br /><br />
+                        </td>
+                    </tr>
+
+                    <tr >
+                        <td colspan="5" style="padding-top: 16px; font-weight:bold; border:none;">Pay Slip for the Month of $monthAndYear</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="5" style="border:none; height:20px;"></td>
+                    </tr>
+
+                    <tr >
+                        <td  class="no-border font-bold">Name</td>
+                        <td class="no-border">$name</td>
+                        <td class="no-border font-bold">Designation</td>
+                        <td class="no-border" colspan="2">$empDesingnation</td>
+                    </tr>
+                    
+                    <tr >
+                       
+                        <td class="no-border font-bold">Bank Name</td>
+                        <td class="no-border">$bankname</td>
+                         <td class="no-border font-bold">Bank A/c No.</td>
+                        <td class="no-border" colspan="2">$bankaccount</td>
+                    </tr>
+
+                  
+                    <tr >
+                        <td class="no-border font-bold">PF No.</td>
+                        <td class="no-border">$pf</td>
+                         <td class="no-border font-bold">ESI No.</td>
+                        <td class="no-border" colspan="2">$esic</td>
+                    </tr>
+
+                    <tr>
+                        <td class="no-border font-bold">Pay Days</td>
+                        <td class="no-border">$workingDays</td>
+                        <td class="no-border font-bold">Present Days</td>
+                        <td class="no-border" colspan="2">$workingDays</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="5" style="border:none; height:20px;"></td>
+                    </tr>
+
+
+                    <tr>
+                        <th>Earning</th>
+                        <th>Unit</th>
+                        <th>Amount</th>
+                        <th>Deductions</th>
+                        <th>Amount</th>
+                    </tr>
+                  $rows
+
+                </tbody>
+            </table>
+
+        </div>
+    </body>
+</html>

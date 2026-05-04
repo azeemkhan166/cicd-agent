@@ -1,0 +1,69 @@
+# Author
+# @ Sourabh Aswal 
+# @Senior Devops
+# CLOUD BUILD FILE FOR Recruit
+
+steps:
+  # Copy the first configuration file from Cloud Storage
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', 'gs://realcoderz-prod-workspace/prodconfigsvc/payrollsvc/gcp-bucket-creds.json', 'src/main/resources/']
+    id: Bucket_File
+
+
+  # Copy the SECOND configuration file from Cloud Storage
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', 'gs://realcoderz-prod-workspace/prodconfigsvc/payrollsvc/application-prod.yaml', 'src/main/resources/']
+    id: Application_Prod_Yaml_File
+
+
+   # Copy the THIRD configuration file from Cloud Storage
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['cp', 'gs://realcoderz-prod-workspace/prodconfigsvc/payrollsvc/application.yaml', 'src/main/resources/']
+    id: Application_Yaml_File  
+ 
+
+   # MAVEN Build
+  - name: 'gcr.io/cloud-builders/mvn'
+    args: ['clean', 'install']
+    id: MAVEN_BUILD 
+
+  # Ensure that COMMIT_SHA is set
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        if [ -z "$COMMIT_SHA" ]; then
+          echo "COMMIT_SHA environment variable is not set."
+          exit 1
+        fi
+ 
+  # Build app
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/production-378812/production-payroll:$COMMIT_SHA', '.']
+    id: BUILD
+ 
+  # Storage of the image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/production-378812/production-payroll:$COMMIT_SHA']
+    id: STORAGE
+ 
+  # Deploy
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: [
+      'run', 'deploy', 'production-payroll',
+      '--image', 'gcr.io/production-378812/production-payroll:$COMMIT_SHA',
+      '--region', 'asia-south1',
+      '--platform', 'managed',
+      '--port', '8080',
+      '--labels=app=prod-payroll',
+      '--allow-unauthenticated'
+    ]
+    id: DEPLOY
+ 
+options:
+  logging: CLOUD_LOGGING_ONLY
+ 
+ 
+#Changes in CLOUD BUILD FILES
+#FIRST CHANGES

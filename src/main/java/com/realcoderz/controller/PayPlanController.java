@@ -1,0 +1,129 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.realcoderz.controller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.realcoderz.service.PayPlanService;
+import com.realcoderz.util.EncryptDecryptUtils;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.LinkedCaseInsensitiveMap;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ *
+ * @author Admin
+ */
+@RestController
+@RequestMapping("/payplan")
+public class PayPlanController {
+    
+    
+    @Autowired
+    private PayPlanService payPlanService;
+    ObjectMapper mapper = new ObjectMapper();
+    
+    @PostMapping("/save")
+    public Map savePayPlan(@RequestBody String data) {
+        
+        Map resultMap = new HashMap<>();
+
+        try {
+            Map map = mapper.readValue(EncryptDecryptUtils.decrypt(data), LinkedCaseInsensitiveMap.class);
+            resultMap = payPlanService.save(map);
+        } catch (Exception ex) {
+        
+            resultMap.clear();
+            resultMap.put("status", "exception");
+        }
+        return resultMap;
+    }
+    
+    @PostMapping("/getAllPayPlan")
+    public Map getAllPayPlan(@RequestBody String data) {
+        
+        Map resultMap = new HashMap<>();
+
+        try {
+            Map map = mapper.readValue(EncryptDecryptUtils.decrypt(data), LinkedCaseInsensitiveMap.class);
+            resultMap = payPlanService.getAllPayPlan(map);
+        } catch (Exception ex) {
+          
+            resultMap.clear();
+            resultMap.put("status", "exception");
+        }
+        return resultMap;
+    }
+    
+         @PostMapping("/findById")
+    public Map findById(@RequestBody String data) {
+        
+        Map resultMap = new HashMap<>();
+
+        try {
+            Map map = mapper.readValue(EncryptDecryptUtils.decrypt(data), LinkedCaseInsensitiveMap.class);
+            resultMap = payPlanService.findById(map);
+        } catch (Exception ex) {
+           
+            resultMap.clear();
+            resultMap.put("status", "exception");
+        }
+        return resultMap;
+    }
+    
+    @PostMapping("/calculationAmount")
+    public Map calculationAmount(@RequestBody String data) {
+        
+        Map resultMap = new HashMap<>();
+
+        try {
+            Map map = mapper.readValue(EncryptDecryptUtils.decrypt(data), LinkedCaseInsensitiveMap.class);
+            resultMap = payPlanService.calculationAmount(map);
+        } catch (Exception ex) {
+           
+            resultMap.clear();
+            resultMap.put("status", "exception");
+        }
+        return resultMap;
+    }
+    
+        @PostMapping("/calculateStandard")
+    public Map calculateStandard(@RequestBody String data) {
+        
+        Map resultMap = new HashMap<>();
+
+        try {
+            Map map = mapper.readValue(EncryptDecryptUtils.decrypt(data), LinkedCaseInsensitiveMap.class);
+            resultMap = payPlanService.calculateStandard(map);
+        } catch (Exception ex) {
+           
+            resultMap.clear();
+            resultMap.put("status", "exception");
+        }
+        return resultMap;
+    }
+    
+    @PostMapping("/findLogsById")
+    public Map findLogsById(@RequestBody String data) {
+        
+        Map resultMap = new HashMap<>();
+
+        try {
+            Map map = mapper.readValue(EncryptDecryptUtils.decrypt(data), LinkedCaseInsensitiveMap.class);
+            resultMap = payPlanService.findLogsById(map);
+        } catch (Exception ex) {
+           
+            resultMap.clear();
+            resultMap.put("status", "exception");
+        }
+        return resultMap;
+    }
+     
+}

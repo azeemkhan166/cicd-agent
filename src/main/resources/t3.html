@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <style>
+            .company-logo{
+                width:150px;
+
+                object-fit:contain;
+            }
+            .company-name{
+                font-size:22px;
+                font-weight:600;
+            }
+            .address{
+                float:right;
+                width:300px;
+            }
+
+            .head-row{
+
+                background:lightgray;
+            }
+
+
+
+            .detail-row{
+                background:#ededed;
+                font-size:18px;
+                padding:2px;
+                font-weight:500;
+            }
+            .my-table, .my-th, .my-td{
+                border: 1px solid #ededed !important;
+                border-collapse: collapse;
+            }
+            .title, .description{
+
+                font-size:14px;
+            }
+            .description{
+                font-weight:600;
+            }
+        </style>
+    </head>
+    <body style="padding:4px">
+        <table style="width:100%">
+            <tr>
+                <td valign="top"> <img class="company-logo" src="$companyLogo"  /></td>
+                <td align="right"><div class="company-name">$companyName</div>
+              
+                </td>
+            </tr>
+            <tr align="right"> <td></td><td  align="right">
+                    <div class="address">$addressOne</div>
+                    <div class="address">$addressTwo</div>
+                    <div class="address">$addressThree</div>
+                </td></tr>
+        </table>
+        <table style="width:100%;margin-top:20px" cellpadding="4">
+            <tr align="center" class="head-row"><td ><b>Salary Slip - $monthAndYear</b></td></tr>
+        </table>
+        <!--employee-details-->
+        <table style="width:100%;margin-top:20px">
+            <tr align="center"><td class="detail-row">Employee Details</td></tr>
+            <tr>
+            <table class="my-table" style="width:100%">
+                <tr>
+                    <td class="my-td description">Name</td>
+                    <td class="my-td title">$name</td>
+                    <td class="my-td description">ECN</td>
+                    <td class="my-td title">$employee_code</td>
+                </tr>
+                <tr>
+                    <td class="my-td description">Designation</td>
+                    <td class="my-td title">$desingnation</td>
+                    <td class="my-td description">Department</td>
+                    <td class="my-td title">$department_name</td>
+                </tr>
+                <tr>
+                    <td class="my-td description">DOJ</td>
+                    <td class="my-td title">$joining_date</td>
+                    <td class="my-td description">Grade</td>
+                    <td class="my-td title ">$grade</td>
+
+                </tr>
+<!--                <tr>
+                    <td class="my-td description">UAN No.</td>
+                    <td class="my-td title">$uan</td>
+                    <td class="my-td description">PAN No.</td>
+                    <td class="my-td title">$pan_number</td>
+                </tr>-->
+                <tr>
+                    <td class="my-td description">Location</td>
+                    <td class="my-td title">$location</td>
+<!--                    <td class="my-td description">Bank Name</td>
+                    <td class="my-td title">$bankname</td>-->
+                     <td class="my-td description">ESIC#</td>
+                    <td class="my-td title">$esic</td>
+                </tr>
+
+                <tr>
+                    <td class="my-td description">PF#</td>
+                    <td class="my-td title">$pf</td>
+                    <td class=" description"></td>
+                    <td class=" title"></td>
+                </tr>
+            </table>
+        </tr>
+    </table>
+    <!--Attendance details-->
+    <table style="width:100%;margin-top:20px">
+        <tr align="center"><td class="detail-row" align="center">Attendance Details</td></tr>
+        <tr>
+        <table class="my-table" style="width:100%">
+            <tr>
+                <td class="my-td description">Worked Days</td>
+                <td class="my-td title">$workingDay</td>
+                <td class="my-td description">Present Days</td>
+                <td class="my-td title">$presentDay</td>
+            </tr>
+            <tr>
+                <td class="my-td description">Approved Leaves</td>
+                <td class="my-td title">$approvedLeave</td>
+                <td class="my-td description">Loss of Pay</td>
+                <td class="my-td title">$Lwp</td>
+            </tr>
+            <tr>
+                <td class="my-td description">Week offs</td>
+                <td class="my-td title">$weekOff</td>
+                <td class="my-td description">Holidays</td>
+                <td class="my-td title ">$holiday</td>
+            </tr>
+            
+<!--             <tr>
+                <td class="my-td description">Arrears Deducted</td>
+                <td class="my-td title">$arrearDeduction</td>
+                <td class="my-td description">Arrears Added</td>
+                <td class="my-td title ">$arrearAddedd</td>
+            </tr>-->
+
+        </table>
+    </tr>
+</table>
+
+<!--Earnings-->
+
+<table style="width:100%;margin-top:20px">
+    <tr align="center"><td class="detail-row" align="center">Earnings</td></tr>
+    <tr>
+    <table class="my-table" style="width:100%">
+        <thead><tr>
+                <th class="my-th">
+                    SNo.
+                </th>
+                <th class="my-th">
+                    Particulars
+                </th>
+                <th class="my-th">
+                    Current Amount
+                </th>
+                <th class="my-th">
+                    YTD Amount
+                </th>
+            </tr></thead>
+        $earningRows
+        <!--                  <tr>
+                              <td class="my-td description">1</td>
+                              <td class="my-td title">Basic Salary</td>
+                              <td class="my-td title">7000</td>
+                              <td class="my-td title">14030</td>
+                          </tr>
+                          <tr>
+                              <td class="my-td description">2</td>
+                              <td class="my-td title">HRA</td>
+                              <td class="my-td title">7000</td>
+                              <td class="my-td title">14030</td>
+                          </tr>
+                           <tr>
+                              <td class="my-td description"></td>
+                              <td class="my-td title"><b>Gross</b></td>
+                              <td class="my-td description">14000</td>
+                              <td class="my-td description">2860</td>
+                          </tr>-->
+
+    </table>
+</tr>
+</table>
+
+<!--Deduction-->
+<table style="width:100%;margin-top:20px">
+    <tr align="center"><td class="detail-row" align="center">Deductions</td></tr>
+    <tr>
+    <table class="my-table" style="width:100%">
+        <thead><tr>
+                <th class="my-th">
+                    SNo.
+                </th>
+                <th class="my-th">
+                    Particulars
+                </th>
+                <th class="my-th">
+                    Current Amount
+                </th>
+                <th class="my-th">
+                    YTD Amount
+                </th>
+            </tr></thead>
+
+        $deductionsRows
+        <!--                  <tr>
+                              <td class="my-td description">1</td>
+                              <td class="my-td title">EPF</td>
+                              <td class="my-td title">1684</td>
+                              <td class="my-td title">0</td>
+                          </tr>
+                          <tr>
+                              <td class="my-td description">2</td>
+                              <td class="my-td title">ESIC</td>
+                              <td class="my-td title">86</td>
+                              <td class="my-td title">0</td>
+                          </tr>
+                           <tr>
+                              <td class="my-td description">3</td>
+                              <td class="my-td title">Income Tax</td>
+                              <td class="my-td title">0</td>
+                              <td class="my-td title">0</td>
+                          </tr>
+                          
+                            <tr>
+                              <td class="my-td description"></td>
+                              <td class="my-td title"><b>Total</b></td>
+                              <td class="my-td description">1770</td>
+                              <td class="my-td description">0</td>
+                          </tr>-->
+
+    </table>
+</tr>
+</table>
+<table class="my-table" style="width:100%" cellpadding="5">
+    <tbody>
+        <tr ><td ><span class="description">$netAmountName </span><span class="title"> $netAmount </span></td></tr>
+
+        <tr ><td class="description">$amountInWord</td></tr>
+    </tbody>
+</table>
+<div style="text-align:center;margin-top:20px"><span><b>Note: </b></span>This is electronically generated and does not require any signature.</div>
+
+
+
+</body>
+</html>

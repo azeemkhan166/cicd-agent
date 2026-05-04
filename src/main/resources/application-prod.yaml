@@ -1,0 +1,22 @@
+spring:
+    jpa:
+        generate-ddl: true
+        hibernate.ddl-auto: update
+        show-sql: true
+        database-platform : org.hibernate.dialect.MySQL5InnoDBDialect
+        hibernate.jdbc.time_zone : IST
+    datasource :
+            onboard :
+                initialize: true
+                driverClassName: com.mysql.cj.jdbc.Driver
+                username: root
+                password: root
+                jdbcUrl: jdbc:mysql://localhost:3306/payroll
+            assessment :
+                initialize: true
+                driverClassName: com.mysql.cj.jdbc.Driver
+                username: root
+                password: root
+                jdbcUrl: jdbc:mysql://localhost:3306/realcoderz
+                
+arriers_org_id: 3                

@@ -1,0 +1,37 @@
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.cloud.gcp.autoconfigure.sql.GcpCloudSqlAutoConfiguration
+      - org.springframework.cloud.gcp.autoconfigure.core.GcpContextAutoConfiguration
+  datasource:
+    url: jdbc:h2:mem:payroll_test;DB_CLOSE_DELAY=-1;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ''
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+    show-sql: false
+
+server:
+  port: 0
+
+encryption_key: TestKey123456789
+
+bucketName: test-bucket
+reimburshment_url: http://localhost
+assessment_url: http://localhost
+stagging: http://localhost
+wkhtmlToPdfPath: wkhtmltopdf
+akron_organization_id: 0
+recruitBucketName: test-bucket
+arriers_org_id: 0
+Organization_ids: 0
+notification_url: http://localhost
+apiGateWayUrl: http://localhost
+recruit_base_url: http://localhost
+orgIdForSymbol: 0
+gcpFilePath: http://localhost/

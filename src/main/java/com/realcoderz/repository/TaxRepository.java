@@ -1,0 +1,19 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.realcoderz.repository;
+
+import com.realcoderz.model.Tax;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+/**
+ *
+ * @author Mayank
+ */
+@Repository
+public interface TaxRepository extends JpaRepository<Tax, Long> {
+
+}
